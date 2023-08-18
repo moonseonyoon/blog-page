@@ -1,0 +1,36 @@
+PAGINATION 
+
+1. Run an SQL query to get the total number of comments for that specific article 
+-> COUNT(*)
+
+2. Use that $total_num_comments to create a loop 
+    3. inside of the loop, create buttons 
+    -> <button onclick="pagination(<?=$_GET['article_id'];?>)"><?= $i ?></button>
+
+HOW MANY BUTTONS TO CREATE? (assuming 5 comments per page)
+    $total_num_comments       num_buttons_to_create 
+            3                          1
+            6                          2
+            13                         3
+
+4. In JavaScript, create the pagination function
+
+5. function pagination(id, offset) {
+    6. Send an AJAX request to a PHP file that will fetch and return the comments 
+    // Step 2 
+    xhr.open("GET", `getComments.php?id=${id}&offset=${offset}`);
+
+    9. In the eventListener, clear out the old comments.
+        Plug / Append in the new ones
+}
+
+7. In the PHP file (getComments.php)
+
+8. $req = $db->prepare("SELECT * FROM comments WHERE id_article = :id LIMIT :offset, 5")
+$req->bindParam("id", $_GET['id], PDO::PARAM_INT);
+$req->bindParam("offset", $_GET['offsett'], PDO::PARAM_INT);
+$req->execute();
+
+while($comment = $req->fetch(PDO::FETCH_OBJ)) {
+    include "commentView.php";
+}
